@@ -52,7 +52,7 @@ npm run build && npm run start:prod
 - **POST** `/auth/login` — Devuelve `access_token` (JWT).
 - **Bearer obligatorio** en todos los endpoints de negocio.
 
-> **IMPORTANTE** `JWT_SECRET` invalida tokens antiguos (pedirá login nuevamente).
+> **Bearer obligatorio** Borrar `JWT_SECRET` invalida tokens antiguos (pedirá login nuevamente).
 
 ---
 
@@ -97,14 +97,14 @@ npm run build && npm run start:prod
 - `GET /orders` — Listar **paginado** con filtros.
 - `GET /orders/:id` — Detalle (con `?expand=true` hace `populate`).
 - `PATCH /orders/:id` — Actualiza **solo** `truck/pickup/dropoff` (no cambia `status` ni `user`).
-- `PATCH /orders/:id/status` — **Endpoint dedicado de cambio de estatus** ✅  
+- `PATCH /orders/:id/status` — **Endpoint dedicado de cambio de estatus**  
   - Flujo permitido: `created → in_transit → completed`.  
 - `DELETE /orders/:id` — Eliminar.
 - `GET /orders/stats/status` — Aggregation con conteo por estatus (admin: global; usuario: solo sus órdenes).
 
 ---
 
-## Reglas de negocio clave
+## Reglas importantes
 
 - **Permisos**:  
   - Sólo puede ver/actualizar/eliminar **sus** órdenes.  
