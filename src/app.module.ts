@@ -9,6 +9,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { TrucksModule } from './trucks/trucks.module';
+import { LocationsModule } from './locations/locations.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { TrucksModule } from './trucks/trucks.module';
     UsersModule,
     AuthModule,
     TrucksModule,
+    LocationsModule,
   ],
 
   providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }],
