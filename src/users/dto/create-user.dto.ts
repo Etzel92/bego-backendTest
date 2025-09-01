@@ -1,26 +1,27 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
   IsEmail,
-  IsEnum,
   IsOptional,
   IsString,
   MinLength,
 } from 'class-validator';
-import { UserRole } from '../schemas/user.schema';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 /**
  * DTO para crear usuarios
- * Se valida con class-validator antes de llegar al controlador.
+ * 'name' es opcional. Si no se envía, se derivará del email en el servicio.
  */
 export class CreateUserDto {
   @IsOptional()
   @IsString()
   @MinLength(3)
-  name!: string;
+  name?: string;
 
+  @ApiProperty({ description: 'Correo electrónico' })
   @IsEmail()
   email!: string;
 
+  @ApiProperty({ description: 'Contraseña', minLength: 8 })
   @IsString()
   @MinLength(8)
   password!: string;

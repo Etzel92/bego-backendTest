@@ -19,12 +19,35 @@ export class UsersService {
     return bcrypt.hash(plain, salt);
   }
 
+  private deriveNameFromEmail(email: string): string {
+    const local = (email ?? '').split('@')[0] ?? '';
+    const cleaned = local.replace(/[._-]+/g, ' ').trim();
+    if (!cleaned) return 'Usuario';
+    return cleaned
+      .split(/\s+/)
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ');
+  }
+
   async create(dto: CreateUserDto) {
-    const exists = await this.userModel.exists({ email: dto.email });
+    const email = dto.email.trim().toLowerCase();
+
+    const exists = await this.userModel.exists({ email });
     if (exists) throw new ConflictException('Email already in use');
 
+    const name =
+      dto.name && dto.name.trim().length >= 3
+        ? dto.name.trim()
+        : this.deriveNameFromEmail(email);
+
     const hashed = await this.hashPassword(dto.password);
-    const user = new this.userModel({ ...dto, password: hashed });
+
+    const user = new this.userModel({
+      name,
+      email,
+      password: hashed,
+    });
+
     await user.save();
 
     const { password: _password, ...rest } = user.toObject();
@@ -62,7 +85,7 @@ export class UsersService {
   }
 
   async findByEmail(email: string, withPassword = false) {
-    const q = this.userModel.findOne({ email });
+    const q = this.userModel.findOne({ email: email.toLowerCase() });
     if (withPassword) q.select('+password');
     const user = await q.lean();
     return user;
@@ -70,11 +93,13 @@ export class UsersService {
 
   async update(id: string, dto: UpdateUserDto) {
     if (dto.email) {
+      const email = dto.email.trim().toLowerCase();
       const exists = await this.userModel.exists({
-        email: dto.email,
+        email,
         _id: { $ne: id },
       });
       if (exists) throw new ConflictException('Email already in use');
+      dto.email = email;
     }
 
     if (dto.password) {
