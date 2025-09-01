@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { TrucksModule } from './trucks/trucks.module';
 import { LocationsModule } from './locations/locations.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { LocationsModule } from './locations/locations.module';
     AuthModule,
     TrucksModule,
     LocationsModule,
+    OrdersModule,
   ],
 
   providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }],
