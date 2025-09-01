@@ -7,7 +7,6 @@ import { ConfigService } from '@nestjs/config';
     MongooseModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
-        // Soporta tanto tu config(`mongodbUri`) como .env(`MONGODB_URI`)
         const uri =
           config.get<string>('mongodbUri') || config.get<string>('MONGODB_URI');
 
@@ -19,7 +18,7 @@ import { ConfigService } from '@nestjs/config';
           uri,
           serverSelectionTimeoutMS: 5000,
           maxPoolSize: 10,
-          autoIndex: !isProd, // crea índices automáticamente en dev
+          autoIndex: !isProd,
         };
       },
     }),
