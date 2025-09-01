@@ -27,7 +27,7 @@ export class UsersService {
     const user = new this.userModel({ ...dto, password: hashed });
     await user.save();
 
-    const { password: password, ...rest } = user.toObject();
+    const { password: _password, ...rest } = user.toObject();
     return rest;
   }
 

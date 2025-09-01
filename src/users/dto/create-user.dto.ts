@@ -13,6 +13,7 @@ import { UserRole } from '../schemas/user.schema';
  * Se valida con class-validator antes de llegar al controlador.
  */
 export class CreateUserDto {
+  @IsOptional()
   @IsString()
   @MinLength(3)
   name!: string;
@@ -23,8 +24,4 @@ export class CreateUserDto {
   @IsString()
   @MinLength(8)
   password!: string;
-
-  @IsOptional()
-  @IsEnum(UserRole)
-  role?: UserRole;
 }

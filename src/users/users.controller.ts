@@ -12,11 +12,14 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 /**
  * Controlador para el dominio Users.
  * Expone rutas REST para crear/listar/consultar/actualizar/eliminar usuarios.
  */
+@ApiTags('users')
+@ApiBearerAuth('bearer')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -27,6 +30,9 @@ export class UsersController {
   }
 
   @Get()
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiQuery({ name: 'search', required: false, type: String })
   findAll(
     @Query('page', new ParseIntPipe({ optional: true })) page = 1,
     @Query('limit', new ParseIntPipe({ optional: true })) limit = 20,
