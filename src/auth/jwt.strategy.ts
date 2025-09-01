@@ -18,4 +18,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   validate(payload: JwtPayload) {
     return { userId: payload.sub, email: payload.email, role: payload.role };
   }
+  
 }
+
+import { AuthGuard } from '@nestjs/passport';
+@Injectable()
+export class JwtAuthGuard extends AuthGuard('jwt') {}
